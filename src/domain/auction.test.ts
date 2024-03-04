@@ -5,13 +5,17 @@ afterEach(() => {
 });
 
 class Auction {
-  constructor(readonly id: string, readonly startDateTime: Date,readonly endDateTime: Date){
+  constructor(readonly id: string, readonly startDateTime: Date,readonly endDateTime: Date, readonly isStarted: boolean = false){
     if(startDateTime < new Date()){
       throw new Error("開始時刻が過去です");
     }
     if(endDateTime < startDateTime){
       throw new Error("終了時刻が開始時刻より過去です");
     }
+  }
+
+  start(): Auction {
+    return new Auction(this.id, this.startDateTime, this.endDateTime, true);
   }
 }
 
@@ -34,7 +38,13 @@ describe("Auction", () => {
     expect(() => new Auction("1", startDate, endDate)).toThrow("終了時刻が開始時刻より過去です");
   });
   test("オークションを開始する", () => {
-    fail();
+     const startDate = new Date();
+    startDate.setHours(startDate.getHours() + 1);
+    const endDate = new Date();
+    endDate.setHours(endDate.getHours() + 2);
+    const auction = new Auction("1", startDate, endDate);
+    const startedAction = auction.start();
+    expect(startedAction.isStarted).toBe(true);
   });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
