@@ -12,27 +12,34 @@ afterEach(() => {
 describe("Auction", () => {
   test("初期化できる", () => {
     const startAt = new Date("2027-01-01T00:00:00Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
 
-    const auction = Auction.of(startAt);
+    const auction = Auction.create(startAt, endAt);
     expect(auction).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     const startAt = new Date("2025-12-31T23:59:59Z");
+    const endAt = new Date("2026-12-31T23:59:59Z");
 
     expect(() => {
-      Auction.of(startAt);
+      Auction.create(startAt, endAt);
     }).toThrow("開始時刻が過去です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     const startAt = new Date("2027-01-01T00:00:00Z");
     const endAt = new Date("2026-12-31T23:59:59Z");
     expect(() => {
-      Auction.of(startAt, endAt);
+      Auction.create(startAt, endAt);
     }).toThrow("終了時刻が開始時刻より過去です");
   });
-  // test("オークションを開始する", () => {
-  //   fail();
-  // });
+  test("オークションを開始する", () => {
+    const startAt = new Date("2027-01-01T00:00:00Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
+
+    const auction = Auction.create(startAt, endAt);
+    auction.start();
+    expect(auction.isStarted()).toBe(true);
+  });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
   // });
