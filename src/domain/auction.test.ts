@@ -1,6 +1,5 @@
 import { describe } from "node:test";
 import { Auction } from "./auction";
-import { start } from "node:repl";
 
 afterEach(() => {
   jest.useRealTimers();
@@ -8,12 +7,17 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const auction = new Auction();
+    const startAt = new Date("2025-01-01T00:00:00Z");
+
+    const auction = Auction.of(startAt);;
     expect(auction).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    const startAt = new Auction(startAt: new Date("2021-01-01T00:00:00Z");
-    expect(startAt).toThrowError("開始時刻が過去です");
+    const startAt = new Date("2021-01-01T00:00:00Z");
+    
+    expect(() => {
+      Auction.of(startAt);
+    }).toThrow("開始時刻が過去です");
   });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
