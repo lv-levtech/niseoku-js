@@ -1,7 +1,10 @@
 import { describe } from "node:test";
+import {  } from "./../util/dateUtil";
 
 class Auction {
   readonly id: number;
+  private startAt: Date | undefined;
+  private endAt: Date | undefined;
   // sallerId: number;
   // productDetail: string;
 
@@ -9,11 +12,17 @@ class Auction {
     this.id = 1;
   }
   create(param: {
-    startAt: Date
-  }): Auction {
+    startAt: Date,
+    endAt: Date
+  }): this {
     if (Date.now() > param.startAt.getTime()) {
       throw new Error("開始時刻が過去のため、オークションを作成できません");
     }
+    if (param.startAt.getTime() > param.endAt.getTime()) {
+      throw new Error("終了時刻が開始時刻より過去のため、オークションを作成できません");
+    }
+    this.startAt = param.startAt;
+    this.endAt = param.endAt;
     return this;
   }
 }
@@ -25,7 +34,7 @@ afterEach(() => {
 describe("Auction", () => {
   test("初期化できる", () => {
     const auction = new Auction();
-    const createdAuction = auction.create({ startAt: new Date("1000000-01-01 12:00:00")});
+    const createdAuction = auction.create({ startAt: new Date("2030-01-01 12:00:00"), endAt: new Date("2031-01-01 11:00:00")});
 
     const expected = 1;
     expect(createdAuction.id).toBe(expected);
@@ -34,7 +43,8 @@ describe("Auction", () => {
     const auction = new Auction();
     expect(() => {
       auction.create({
-        startAt: new Date("2021-01-01 12:00:00")
+        startAt: new Date("2020-01-01 12:00:00"),
+        endAt: new Date("2021-01-01 11:00:00")
       });
     }).toThrow();
   });
@@ -43,7 +53,7 @@ describe("Auction", () => {
     expect(() => {
       auction.create({
         startAt: new Date("2021-01-01 12:00:00"),
-        endAt: new Date("2021-01-01 12:00:00")
+        endAt: new Date("2021-01-01 11:00:00")
       });
     }).toThrow();
   });
