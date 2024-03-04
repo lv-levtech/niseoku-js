@@ -15,6 +15,9 @@ class Auction {
   }
 
   start(): Auction {
+    if(this.startDateTime > new Date()){
+      throw new Error("開始時刻前にオークションを開始できない");
+    }
     return new Auction(this.id, this.startDateTime, this.endDateTime, true);
   }
 }
@@ -38,7 +41,7 @@ describe("Auction", () => {
     expect(() => new Auction("1", startDate, endDate)).toThrow("終了時刻が開始時刻より過去です");
   });
   test("オークションを開始する", () => {
-     const startDate = new Date();
+    const startDate = new Date();
     startDate.setHours(startDate.getHours() + 1);
     const endDate = new Date();
     endDate.setHours(endDate.getHours() + 2);
@@ -46,9 +49,14 @@ describe("Auction", () => {
     const startedAction = auction.start();
     expect(startedAction.isStarted).toBe(true);
   });
-  // test("開始時刻前にオークションを開始できない", () => {
-  //   fail();
-  // });
+  test("開始時刻前にオークションを開始できない", () => {
+    const startDate = new Date();
+    startDate.setHours(startDate.getHours() + 1);
+    const endDate = new Date();
+    endDate.setHours(endDate.getHours() + 2);
+    const auction = new Auction("1", startDate, endDate);
+    expect(() => auction.start()).toThrow("開始時刻前にオークションを開始できない");
+  });
   // test("オークションが開始していない場合は、入札できない", () => {
   //   fail();
   // });
