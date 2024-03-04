@@ -2,13 +2,19 @@ import { describe } from "node:test";
 
 class Auction {
   readonly id: number;
+  readonly startAt: Date;
   // sallerId: number;
   // productDetail: string;
 
   constructor() {
     this.id = 1;
   }
-  create(): Auction {
+  create(param: {
+    startAt: Date
+  }): Auction {
+    if (Date.now() > param.startAt.getTime()) {
+      throw new Error("開始時刻が過去のため、オークションを作成できません");
+    }
     return this;
   }
 }
@@ -25,9 +31,14 @@ describe("Auction", () => {
     const expected = 1;
     expect(createdAuction.id).toBe(expected);
   });
-  // test("開始時刻が過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("開始時刻が過去の場合は、オークションは作成できない", () => {
+    const auction = new Auction();
+    expect(() => {
+      auction.create({
+        startAt: new Date("2021-01-01 12:00:00")
+      });
+    }).toThrow();
+  });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
   // });
