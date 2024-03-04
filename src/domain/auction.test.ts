@@ -33,9 +33,9 @@ describe("Auction", () => {
     endDate.setHours(endDate.getHours() - 1);
     expect(() => new Auction("1", startDate, endDate)).toThrow("終了時刻が開始時刻より過去です");
   });
-  // test("オークションを開始する", () => {
-  //   fail();
-  // });
+  test("オークションを開始する", () => {
+    fail();
+  });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
   // });
