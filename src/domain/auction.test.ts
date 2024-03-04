@@ -5,17 +5,20 @@ afterEach(() => {
 });
 
 class Auction {
-  constructor(readonly id :string){}
+  constructor(readonly id: string, readonly startDateTime: Date){}
 }
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const auction = new Auction("1");
+    const auction = new Auction("1", new Date());
     expect(auction.id).toBe("1")
   });
-  // test("開始時刻が過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+
+  test("開始時刻が過去の場合は、オークションは作成できない", () => {
+    const past = new Date();
+    past.setHours(past.getHours() - 1);
+    expect(() => new Auction("1", past)).toThrow("開始時刻が過去です");
+  });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
   // });
