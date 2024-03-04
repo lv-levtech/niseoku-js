@@ -6,7 +6,8 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    fail();
+    const auction = new Auction();
+    expect(auction).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     fail();
