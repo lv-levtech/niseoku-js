@@ -1,5 +1,14 @@
 import { describe } from "node:test";
-import {  } from "./../util/dateUtil";
+import { DateUtil } from "./../util/dateUtil";
+
+class DateUtilMock implements DateUtil {
+  constructor() {
+    
+    getCurrentDate(): Date {
+      return new Date("2020-01-01 12:00:00");
+    }
+  }
+}
 
 class Auction {
   readonly id: number;
@@ -9,13 +18,15 @@ class Auction {
   // productDetail: string;
 
   constructor() {
+    const dateUtil = new DateUtilMock();
     this.id = 1;
   }
+
   create(param: {
     startAt: Date,
     endAt: Date
   }): this {
-    if (Date.now() > param.startAt.getTime()) {
+    if (dateUtil.getCurrentDate() > param.startAt.getTime()) {
       throw new Error("開始時刻が過去のため、オークションを作成できません");
     }
     if (param.startAt.getTime() > param.endAt.getTime()) {

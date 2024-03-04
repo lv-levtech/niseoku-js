@@ -1,6 +1,6 @@
 
 
-interface DateUtil {
+export interface DateUtil {
   getCurrentDate(): Date;
 }
 
