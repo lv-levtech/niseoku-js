@@ -2,7 +2,6 @@ import { describe } from "node:test";
 
 class Auction {
   readonly id: number;
-  readonly startAt: Date;
   // sallerId: number;
   // productDetail: string;
 
@@ -26,7 +25,7 @@ afterEach(() => {
 describe("Auction", () => {
   test("初期化できる", () => {
     const auction = new Auction();
-    const createdAuction = auction.create();
+    const createdAuction = auction.create({ startAt: new Date("1000000-01-01 12:00:00")});
 
     const expected = 1;
     expect(createdAuction.id).toBe(expected);
@@ -39,9 +38,15 @@ describe("Auction", () => {
       });
     }).toThrow();
   });
-  // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
+    const auction = new Auction();
+    expect(() => {
+      auction.create({
+        startAt: new Date("2021-01-01 12:00:00"),
+        endAt: new Date("2021-01-01 12:00:00")
+      });
+    }).toThrow();
+  });
   // test("オークションを開始する", () => {
   //   fail();
   // });
