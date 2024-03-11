@@ -1,24 +1,25 @@
 import { describe } from "node:test";
-import { DateUtil } from "./../util/dateUtil";
+// import { DateUtil } from "./../util/dateUtil";
 
-class DateUtilMock implements DateUtil {
-  constructor() {
+// class DateUtilMock implements DateUtil {
+//   constructor() {
     
-    getCurrentDate(): Date {
-      return new Date("2020-01-01 12:00:00");
-    }
-  }
-}
+//     getCurrentDate(): Date {
+//       return new Date("2020-01-01 12:00:00");
+//     }
+//   }
+// }
 
 class Auction {
   readonly id: number;
-  private startAt: Date | undefined;
-  private endAt: Date | undefined;
+  // isStated: number;
+  // private startAt: Date | undefined;
+  // private endAt: Date | undefined;
   // sallerId: number;
   // productDetail: string;
 
   constructor() {
-    const dateUtil = new DateUtilMock();
+    // const dateUtil = new DateUtilMock();
     this.id = 1;
   }
 
@@ -26,14 +27,14 @@ class Auction {
     startAt: Date,
     endAt: Date
   }): this {
-    if (dateUtil.getCurrentDate() > param.startAt.getTime()) {
+    if (Date.now() > param.startAt.getTime()) {
       throw new Error("開始時刻が過去のため、オークションを作成できません");
     }
     if (param.startAt.getTime() > param.endAt.getTime()) {
       throw new Error("終了時刻が開始時刻より過去のため、オークションを作成できません");
     }
-    this.startAt = param.startAt;
-    this.endAt = param.endAt;
+    // this.startAt = param.startAt;
+    // this.endAt = param.endAt;
     return this;
   }
 }
@@ -68,9 +69,10 @@ describe("Auction", () => {
       });
     }).toThrow();
   });
-  // test("オークションを開始する", () => {
-  //   fail();
-  // });
+  test("オークションを開始する", () => {
+    const auction = new Auction();
+
+  });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
   // });
