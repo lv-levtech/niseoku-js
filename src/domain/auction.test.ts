@@ -67,13 +67,27 @@ describe("Auction", () => {
     const endAt = new Date("2027-12-31T23:59:59Z");
 
     const auction = Auction.create(startAt, endAt);
+    const now = new Date("2027-01-01T00:00:01Z");
+    jest.useFakeTimers().setSystemTime(now.getTime());
+    auction.start();
     auction.bid(100);
 
     expect(auction.bidPrice).toBe(100);
   });
-  // test("最高額より少ない価格では入札できない", () => {
-  //   fail();
-  // });
+  test("最高額より少ない価格では入札できない", () => {
+    const startAt = new Date("2026-01-01T00:00:01Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
+
+    const auction = Auction.create(startAt, endAt);
+    const now = new Date("2027-01-01T00:00:01Z");
+    jest.useFakeTimers().setSystemTime(now.getTime());
+    auction.start();
+    auction.bid(101);
+
+    expect(() => {
+      auction.bid(100);
+    }).toThrow("最高額より少ない価格では入札できません");
+  });
   // test("オークションを終了できる_落札者が存在する場合", () => {
   //   fail();
   // });

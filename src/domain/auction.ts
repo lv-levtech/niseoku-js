@@ -1,6 +1,9 @@
 export class Auction {
   private status: "ready" | "started" | "ended" = "ready";
-    private bidPrice: number = 0;
+  private _bidPrice: number = 0;
+  public get bidPrice(): number {
+    return this._bidPrice;
+  }
   constructor(
     readonly startAt: Date,
     readonly endAt: Date,
@@ -33,7 +36,10 @@ export class Auction {
     if (this.status !== "started") {
       throw new Error("オークションが開始していない場合は、入札できません");
     }
+    if (price <= this._bidPrice) {
+      throw new Error("最高額より少ない価格では入札できません");
+    }
 
-    this.bidPrice = price;
+    this._bidPrice = price;
   }
 }
