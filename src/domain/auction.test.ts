@@ -1,4 +1,5 @@
 import { describe } from "node:test";
+import { Money } from "./money";
 // import { DateUtil } from "./../util/dateUtil";
 
 // class DateUtilMock implements DateUtil {
@@ -40,11 +41,18 @@ class Auction {
     return new Auction(param.startAt);
   }
 
-  start() {
-    if (Date.now() < this.startAt!.getTime()) {
+  start(localTime: Date) {
+    if (localTime.getTime() < this.startAt!.getTime()) {
       throw new Error("開始時刻前のため、オークションを開始できません");
     }
     this.isStarted = true;
+  }
+
+  bid(money: Money) {
+    if (!this.isStarted) {
+      throw new Error("オークションが開始していないため、入札できません");
+    }
+    console.log(money)
   }
 }
 
@@ -80,7 +88,7 @@ describe("Auction", () => {
       startAt: new Date("2024-03-21 12:00:00"),
       endAt: new Date("2031-01-01 11:00:00")
     });
-    auction.start();
+    auction.start(new Date("2024-03-21 12:01:00"));
     expect(() => {
       auction.isStarted;
     }).toBeTruthy();
@@ -92,12 +100,19 @@ describe("Auction", () => {
     });
     
     expect(() => {
-      auction.start();
+      auction.start(new Date("2024-03-21 11:00:00"));
     }).toThrow();
   });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const auction = Auction.create({
+      startAt: new Date("2030-01-01 12:00:00"),
+      endAt: new Date("2031-01-01 11:00:00")
+    });
+    expect(() => {
+      const money = Money.ofJPY(1000);
+      auction.bid(money)
+    }).toThrow();
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
