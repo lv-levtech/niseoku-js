@@ -5,7 +5,7 @@ afterEach(() => {
 });
 
 class Auction {
-  private constructor(readonly id: string, readonly startDateTime: Date,readonly endDateTime: Date, readonly isStarted: boolean = false){}
+  private constructor(readonly id: string, readonly startDateTime: Date,readonly endDateTime: Date, readonly isStarted: boolean = false, readonly price: number){}
   
   static create(
     id: string,
@@ -18,14 +18,22 @@ class Auction {
       if(endDateTime < startDateTime){
         throw new Error("終了時刻が開始時刻より過去です");
       }
-      return new Auction(id, startDateTime, endDateTime, false);
+      return new Auction(id, startDateTime, endDateTime, false, 0);
   }
 
   start(now: Date): Auction {
     if(this.startDateTime > now){
       throw new Error("開始時刻前にオークションを開始できない");
     }
-    return new Auction(this.id, this.startDateTime, this.endDateTime, true);
+    return new Auction(this.id, this.startDateTime, this.endDateTime, true, 0);
+  }
+
+  bid(price: number): Auction {
+    if(!this.isStarted){
+      throw new Error("オークションが開始していません");
+    }
+
+    return new Auction(this.id, this.startDateTime, this.endDateTime, true, price);
   }
 }
 
@@ -71,9 +79,10 @@ describe("Auction", () => {
 
     expect(() => auction.start(now)).toThrow("開始時刻前にオークションを開始できない");
   });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const auction = Auction.create("1", new Date(), new Date());
+    expect(() => auction.bid(10000)).toThrow();
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
