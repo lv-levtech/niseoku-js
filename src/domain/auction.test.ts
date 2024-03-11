@@ -12,21 +12,22 @@ import { describe } from "node:test";
 
 class Auction {
   readonly id: number;
-  // isStated: number;
+  isStarted: boolean;
   // private startAt: Date | undefined;
   // private endAt: Date | undefined;
   // sallerId: number;
   // productDetail: string;
 
-  constructor() {
+  private constructor() {
     // const dateUtil = new DateUtilMock();
     this.id = 1;
+    this.isStarted = false;
   }
 
-  create(param: {
+  static create(param: {
     startAt: Date,
     endAt: Date
-  }): this {
+  }): Auction {
     if (Date.now() > param.startAt.getTime()) {
       throw new Error("開始時刻が過去のため、オークションを作成できません");
     }
@@ -35,7 +36,11 @@ class Auction {
     }
     // this.startAt = param.startAt;
     // this.endAt = param.endAt;
-    return this;
+    return new Auction();
+  }
+
+  start() {
+    this.isStarted = true;
   }
 }
 
@@ -45,33 +50,36 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const auction = new Auction();
-    const createdAuction = auction.create({ startAt: new Date("2030-01-01 12:00:00"), endAt: new Date("2031-01-01 11:00:00")});
+    const createdAuction = Auction.create({ startAt: new Date("2030-01-01 12:00:00"), endAt: new Date("2031-01-01 11:00:00")});
 
     const expected = 1;
     expect(createdAuction.id).toBe(expected);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    const auction = new Auction();
     expect(() => {
-      auction.create({
+      Auction.create({
         startAt: new Date("2020-01-01 12:00:00"),
         endAt: new Date("2021-01-01 11:00:00")
       });
     }).toThrow();
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-    const auction = new Auction();
     expect(() => {
-      auction.create({
+      Auction.create({
         startAt: new Date("2021-01-01 12:00:00"),
         endAt: new Date("2021-01-01 11:00:00")
       });
     }).toThrow();
   });
   test("オークションを開始する", () => {
-    const auction = new Auction();
-
+    const auction = Auction.create({
+      startAt: new Date("2030-01-01 12:00:00"),
+      endAt: new Date("2031-01-01 11:00:00")
+    });
+    auction.start();
+    expect(() => {
+      auction.isStarted;
+    }).toBeTruthy();
   });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
