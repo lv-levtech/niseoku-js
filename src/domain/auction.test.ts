@@ -45,10 +45,7 @@ describe("Auction", () => {
     const endAt = new Date("2027-12-31T23:59:59Z");
 
     const auction = Auction.create(startAt, endAt);
-    breforeEach(() => {
-      // ここで開始時間をいじりたい
-      jest.useRealTimers();
-    }
+
     auction.start();
     expect(() => {
       auction.start();

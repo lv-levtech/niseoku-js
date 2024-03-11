@@ -6,7 +6,9 @@ export class Auction {
   ) {}
 
   static create(startAt: Date, endAt: Date): Auction {
-    if (startAt < new Date()) {
+    const now = new Date();
+    console.log("created: ", now);
+    if (startAt < now) {
       throw new Error("開始時刻が過去です");
     }
     if (startAt > endAt) {
@@ -16,7 +18,9 @@ export class Auction {
   }
 
   start(): void {
-    if (this.startAt > new Date()) {
+    const now = new Date();
+    console.log("started: ", now);
+    if (this.startAt > now) {
       throw new Error("開始時刻前の為、オークションが開始出来ません");
     }
     this.status = "started";
