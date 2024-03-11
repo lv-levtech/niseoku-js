@@ -13,15 +13,16 @@ import { describe } from "node:test";
 class Auction {
   readonly id: number;
   isStarted: boolean;
-  // private startAt: Date | undefined;
+  startAt: Date | undefined;
   // private endAt: Date | undefined;
   // sallerId: number;
   // productDetail: string;
 
-  private constructor() {
+  private constructor(startAt: Date) {
     // const dateUtil = new DateUtilMock();
     this.id = 1;
     this.isStarted = false;
+    this.startAt = startAt;
   }
 
   static create(param: {
@@ -36,10 +37,13 @@ class Auction {
     }
     // this.startAt = param.startAt;
     // this.endAt = param.endAt;
-    return new Auction();
+    return new Auction(param.startAt);
   }
 
   start() {
+    if (Date.now() < this.startAt!.getTime()) {
+      throw new Error("開始時刻前のため、オークションを開始できません");
+    }
     this.isStarted = true;
   }
 }
@@ -73,7 +77,7 @@ describe("Auction", () => {
   });
   test("オークションを開始する", () => {
     const auction = Auction.create({
-      startAt: new Date("2030-01-01 12:00:00"),
+      startAt: new Date("2023-01-01 12:00:00"),
       endAt: new Date("2031-01-01 11:00:00")
     });
     auction.start();
@@ -81,9 +85,16 @@ describe("Auction", () => {
       auction.isStarted;
     }).toBeTruthy();
   });
-  // test("開始時刻前にオークションを開始できない", () => {
-  //   fail();
-  // });
+  test("開始時刻前にオークションを開始できない", () => {
+    const auction = Auction.create({
+      startAt: new Date("2030-01-01 12:00:00"),
+      endAt: new Date("2031-01-01 11:00:00")
+    });
+    
+    expect(() => {
+      auction.start();
+    }).toThrow();
+  });
   // test("オークションが開始していない場合は、入札できない", () => {
   //   fail();
   // });
