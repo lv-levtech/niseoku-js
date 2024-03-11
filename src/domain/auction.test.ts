@@ -81,7 +81,7 @@ describe("Auction", () => {
   });
   test("オークションが開始していない場合は、入札できない", () => {
     const auction = Auction.create("1", new Date(), new Date());
-    expect(() => auction.bid(10000)).toThrow();
+    expect(() => auction.bid(10000)).toThrow("オークションが開始していません");
   });
   test("最高額にてオークションに入札する", () => {
     const auction = Auction.create("1", new Date(), new Date());
