@@ -15,6 +15,7 @@ class Auction {
   readonly id: number;
   isStarted: boolean;
   startAt: Date | undefined;
+  maxBidPrice: Money;
   // private endAt: Date | undefined;
   // sallerId: number;
   // productDetail: string;
@@ -23,6 +24,7 @@ class Auction {
     // const dateUtil = new DateUtilMock();
     this.id = 1;
     this.isStarted = false;
+    this.maxBidPrice = Money.ofJPY(0);
     this.startAt = startAt;
   }
 
@@ -36,8 +38,6 @@ class Auction {
     if (param.startAt.getTime() > param.endAt.getTime()) {
       throw new Error("終了時刻が開始時刻より過去のため、オークションを作成できません");
     }
-    // this.startAt = param.startAt;
-    // this.endAt = param.endAt;
     return new Auction(param.startAt);
   }
 
@@ -52,7 +52,7 @@ class Auction {
     if (!this.isStarted) {
       throw new Error("オークションが開始していないため、入札できません");
     }
-    console.log(money)
+    this.maxBidPrice = money;
   }
 }
 
@@ -113,12 +113,30 @@ describe("Auction", () => {
       auction.bid(money)
     }).toThrow();
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
-  // test("最高額より少ない価格では入札できない", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {
+    const auction = Auction.create({
+      startAt: new Date("2030-01-01 12:00:00"),
+      endAt: new Date("2031-01-01 11:00:00")
+    });
+    auction.start(new Date("2030-01-01 12:00:00"));
+
+    const money = Money.ofJPY(1000);
+    auction.bid(money)
+    expect(auction.maxBidPrice).toBe(money);
+  });
+  test("最高額より少ない価格では入札できない", () => {
+    const auction = Auction.create({
+      startAt: new Date("2030-01-01 12:00:00"),
+      endAt: new Date("2031-01-01 11:00:00")
+    });
+    auction.start(new Date("2030-01-01 12:00:00"));
+
+    const money1 = Money.ofJPY(1000);
+    auction.bid(money1)
+
+    const money2 = Money.ofJPY(900);
+    expect(auction.bid(money2)).toThrow();
+  });
   // test("オークションを終了できる_落札者が存在する場合", () => {
   //   fail();
   // });
