@@ -40,9 +40,16 @@ describe("Auction", () => {
     auction.start();
     expect(auction.isStarted()).toBe(true);
   });
-  // test("開始時刻前にオークションを開始できない", () => {
-  //   fail();
-  // });
+  test("開始時刻前にオークションを開始できない", () => {
+    const startAt = new Date("2025-12-31T23:59:59Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
+
+    const auction = Auction.create(startAt, endAt);
+    auction.start();
+    expect(() => {
+      auction.start();
+    }).toThrow("開始時刻前の為、オークションが開始出来ません");
+  });
   // test("オークションが開始していない場合は、入札できない", () => {
   //   fail();
   // });
