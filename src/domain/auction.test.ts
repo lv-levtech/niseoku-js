@@ -41,10 +41,14 @@ describe("Auction", () => {
     expect(auction.isStarted()).toBe(true);
   });
   test("開始時刻前にオークションを開始できない", () => {
-    const startAt = new Date("2025-12-31T23:59:59Z");
+    const startAt = new Date("2026-01-01T00:00:01Z");
     const endAt = new Date("2027-12-31T23:59:59Z");
 
     const auction = Auction.create(startAt, endAt);
+    breforeEach(() => {
+      // ここで開始時間をいじりたい
+      jest.useRealTimers();
+    }
     auction.start();
     expect(() => {
       auction.start();
