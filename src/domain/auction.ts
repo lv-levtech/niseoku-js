@@ -29,4 +29,10 @@ export class Auction {
   isStarted(): boolean {
     return this.status === "started";
   }
+
+  bid(_price: number): void {
+    if (this.status !== "started") {
+      throw new Error("オークションが開始していない場合は、入札できません");
+    }
+  }
 }

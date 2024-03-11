@@ -37,6 +37,8 @@ describe("Auction", () => {
     const endAt = new Date("2027-12-31T23:59:59Z");
 
     const auction = Auction.create(startAt, endAt);
+    const now = new Date("2027-01-01T00:00:01Z");
+    jest.useFakeTimers().setSystemTime(now.getTime());
     auction.start();
     expect(auction.isStarted()).toBe(true);
   });
@@ -46,14 +48,20 @@ describe("Auction", () => {
 
     const auction = Auction.create(startAt, endAt);
 
-    auction.start();
     expect(() => {
       auction.start();
     }).toThrow("開始時刻前の為、オークションが開始出来ません");
   });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const startAt = new Date("2026-01-01T00:00:01Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
+
+    const auction = Auction.create(startAt, endAt);
+
+    expect(() => {
+      auction.bid(100);
+    }).toThrow("オークションが開始していない場合は、入札できません");
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
