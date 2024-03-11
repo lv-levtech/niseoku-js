@@ -77,7 +77,7 @@ describe("Auction", () => {
   });
   test("オークションを開始する", () => {
     const auction = Auction.create({
-      startAt: new Date("2023-01-01 12:00:00"),
+      startAt: new Date("2024-03-21 12:00:00"),
       endAt: new Date("2031-01-01 11:00:00")
     });
     auction.start();
