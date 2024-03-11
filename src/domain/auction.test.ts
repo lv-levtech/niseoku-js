@@ -33,6 +33,10 @@ class Auction {
       throw new Error("オークションが開始していません");
     }
 
+    if(this.price > 0 && this.price >= price){
+      throw new Error("最高額より少ない価格では入札できません");
+    }
+
     return new Auction(this.id, this.startDateTime, this.endDateTime, true, price);
   }
 }
@@ -89,9 +93,13 @@ describe("Auction", () => {
     const bidAuction = startedAuction.bid(9000);
     expect(bidAuction.bid(10000).price).toBe(10000);
   });
-  // test("最高額より少ない価格では入札できない", () => {
-  //   fail();
-  // });
+  test("最高額より少ない価格では入札できない", () => {
+    const auction = Auction.create("1", new Date(), new Date() );
+    const startDate = new Date();
+    startDate.setHours(startDate.getHours() + 1);
+    const bidAuction = auction.start(startDate).bid(9000);
+    expect(() => bidAuction.bid(8000)).toThrow("最高額より少ない価格では入札できません");
+  });
   // test("オークションを終了できる_落札者が存在する場合", () => {
   //   fail();
   // });
