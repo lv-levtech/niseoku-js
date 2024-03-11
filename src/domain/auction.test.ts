@@ -62,9 +62,15 @@ describe("Auction", () => {
       auction.bid(100);
     }).toThrow("オークションが開始していない場合は、入札できません");
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {
+    const startAt = new Date("2026-01-01T00:00:01Z");
+    const endAt = new Date("2027-12-31T23:59:59Z");
+
+    const auction = Auction.create(startAt, endAt);
+    auction.bid(100);
+
+    expect(auction.bidPrice).toBe(100);
+  });
   // test("最高額より少ない価格では入札できない", () => {
   //   fail();
   // });
