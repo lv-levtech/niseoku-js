@@ -83,9 +83,12 @@ describe("Auction", () => {
     const auction = Auction.create("1", new Date(), new Date());
     expect(() => auction.bid(10000)).toThrow();
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {
+    const auction = Auction.create("1", new Date(), new Date());
+    const startedAuction = auction.start(new Date());
+    const bidAuction = startedAuction.bid(9000);
+    expect(bidAuction.bid(10000).price).toBe(10000);
+  });
   // test("最高額より少ない価格では入札できない", () => {
   //   fail();
   // });
