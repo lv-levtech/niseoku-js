@@ -57,6 +57,7 @@ describe("Auction", () => {
     endTime.setFullYear(endTime.getFullYear() + 2);
     const auction = Auction.create(1, startTime, endTime);
     const now = new Date();
+    now.setFullYear(now.getFullYear() + 2);
     const startedAuction = auction.start(now);
     expect(startedAuction.isStarted).toBe(true);
   });
