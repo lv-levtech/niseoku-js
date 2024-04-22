@@ -3,8 +3,13 @@ import { describe } from "node:test";
 
 class Auction {
   public readonly id: number;
-  constructor(id: number) {
+  public readonly startTime: Date;
+  constructor(id: number, startTime: Date) {
+    if (startTime < new Date()) {
+      throw new Error("開始時刻が過去です");
+    }
     this.id = id;
+    this.startTime = startTime;
   }
 }
 
@@ -14,12 +19,14 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    expect(new Auction(1)).toBeInstanceOf(Auction);
+    expect(new Auction(1, new Date())).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
+    const past = new Date();
+    past.setFullYear(past.getFullYear() - 1);
     expect(() => {
-      new Auction(1);
-    }).toThrowError("開始時刻が過去です");
+      new Auction(1, past);
+    }).toThrow("開始時刻が過去です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     fail();
