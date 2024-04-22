@@ -24,24 +24,24 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const feature = new Date();
-    expect(new Auction(1, new Date(), feature)).toBeInstanceOf(Auction);
+    const endTime = new Date();
+    expect(new Auction(1, new Date(), endTime)).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    const past = new Date();
-    past.setFullYear(past.getFullYear() - 1);
-    const feature = new Date();
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() - 1);
+    const endTime = new Date();
     expect(() => {
-      new Auction(1, past, feature);
+      new Auction(1, startTime, endTime);
     }).toThrow("開始時刻が過去です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-    const past = new Date();
-    past.setFullYear(past.getFullYear() + 10);
-    const feature = new Date();
-    feature.setFullYear(feature.getFullYear() +1);
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 10);
+    const endTime = new Date();
+    endTime.setFullYear(endTime.getFullYear() +1);
     expect(() => {
-      new Auction(1, past, feature);
+      new Auction(1, startTime, endTime);
     }).toThrow("終了時刻が開始時刻よりも過去です");
   });
   test("オークションを開始する", () => {
