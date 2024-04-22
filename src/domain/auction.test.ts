@@ -51,13 +51,16 @@ describe("Auction", () => {
     }).toThrow("終了時刻が開始時刻よりも過去です");
   });
   test("オークションを開始する", () => {
-    const startTime = new Date();
-    startTime.setFullYear(startTime.getFullYear() + 1);
-    const endTime = new Date();
-    endTime.setFullYear(endTime.getFullYear() + 2);
-    const auction = Auction.create(1, startTime, endTime);
     const now = new Date();
-    now.setFullYear(now.getFullYear() + 2);
+    // now.setFullYear(now.getFullYear() + 2);
+
+    const startTime = now;
+    startTime.setFullYear(startTime.getFullYear() - 1);
+
+    const endTime = now;
+    endTime.setFullYear(endTime.getFullYear() + 1);
+
+    const auction = Auction.create(1, startTime, endTime);
     const startedAuction = auction.start(now);
     expect(startedAuction.isStarted).toBe(true);
   });
