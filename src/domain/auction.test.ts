@@ -1,6 +1,12 @@
 import { describe } from "node:test";
 import { Auction } from "./auction";
 
+beforeEach(() => {
+  jest.useFakeTimers();
+  const mockDate = new Date("2023/01/01");
+  jest.setSystemTime(mockDate);
+});
+
 afterEach(() => {
   jest.useRealTimers();
 });
@@ -11,8 +17,7 @@ describe("Auction", () => {
     expect(auction).toBeDefined();
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    const auction = new Auction(new Date("2024-04-22"));
-    expect(auction.started_at).toThrow();
+    expect(()=>{new Auction(new Date("2022-12-31"))}).toThrow();
   });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
