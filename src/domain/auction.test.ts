@@ -17,7 +17,9 @@ describe("Auction", () => {
     expect(new Auction(1)).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    fail();
+    expect(() => {
+      new Auction(1);
+    }).toThrowError("開始時刻が過去です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     fail();
