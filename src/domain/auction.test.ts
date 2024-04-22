@@ -13,15 +13,15 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const auction = new Auction(new Date("2024-04-22"));
+    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
     expect(auction).toBeDefined();
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    expect(()=>{new Auction(new Date("2022-12-31"))}).toThrow();
+    expect(()=>{new Auction(new Date("2022-12-31"),new Date("2024-04-23"))}).toThrow();
   });
-  // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
+    expect(()=>{new Auction(new Date("2024-04-31"),new Date("2022-12-30"))}).toThrow();
+  });
   // test("オークションを開始する", () => {
   //   fail();
   // });
