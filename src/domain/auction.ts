@@ -1,10 +1,13 @@
 class Auction {
 
-    static create(): Auction {
-        return new Auction();
+    private constructor(
+        readonly id: number,
+        readonly startTime: Date,
+    ){}
+
+    static create(id: number, startTime: Date): Auction {
+        return new Auction(id);
     }
-    // private constructor(
-    //     readonly id: AuctionId,
-    // )  
+      
 }
 export { Auction };
