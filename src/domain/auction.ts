@@ -6,7 +6,9 @@ class Auction {
     ){}
 
     static create(id: number, startTime: Date): Auction {
-        return new Auction(id);
+        if (nowDate)
+
+        return new Auction(id, startTime);
     }
       
 }

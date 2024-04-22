@@ -5,14 +5,18 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
+export const nowDate = new Date("2021-01-01T00:00:00.000Z");
+
 describe("Auction", () => {
   test("初期化できる", () => {
-    const obj = Auction.create(1);
+    const obj = Auction.create(1, new Date());
     expect(obj).toBeInstanceOf(Auction);
   });
-  // test("開始時刻が過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("開始時刻が過去の場合は、オークションは作成できない", () => {
+    expect(() => {
+      Auction.create(1, new Date());
+    }).toThrow();
+  });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
   // });
