@@ -1,3 +1,4 @@
+import { assert } from "console";
 import { describe } from "node:test";
 
 afterEach(() => {
@@ -6,7 +7,8 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    fail();
+    const obj = new Auction();
+    expect(obj).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     fail();
