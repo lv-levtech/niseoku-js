@@ -9,17 +9,17 @@ export const nowDate = new Date("2021-01-01T00:00:00.000Z");
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const obj = Auction.create(1, new Date());
+    const obj = Auction.create(1, new Date(), new Date());
     expect(obj).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     expect(() => {
-      Auction.create(1, new Date('2020-01-01T00:00:00.000Z'));
+      Auction.create(1, new Date('2020-01-01T00:00:00.000Z'), new Date('2025-01-02T00:00:00.000Z'));
     }).toThrow("開始時刻が過去の日付です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     expect(() => {
-      Auction.create(1, new Date('2020-01-01T00:00:00.000Z'), new Date('2020-01-01T00:00:00.000Z'));
+      Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-01T00:00:00.000Z'));
     }).toThrow("終了時刻が開始時刻より過去の日付です");
   });
   // test("オークションを開始する", () => {

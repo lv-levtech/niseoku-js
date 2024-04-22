@@ -12,10 +12,9 @@ class Auction {
         if (nowDate > startTime) {
             throw new Error("開始時刻が過去の日付です")
         }
-        if (nowDate > startTime) {
-            throw new Error("開始時刻が過去の日付です")
+        if (startTime > endTime) {
+            throw new Error("終了時刻が開始時刻より過去の日付です")
         }
-
         return new Auction(id, startTime, endTime);
     }
       
