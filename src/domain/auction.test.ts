@@ -4,12 +4,17 @@ import { describe } from "node:test";
 class Auction {
   public readonly id: number;
   public readonly startTime: Date;
-  constructor(id: number, startTime: Date) {
+  public readonly endTime: Date;
+  constructor(id: number, startTime: Date, endTime: Date) {
     if (startTime < new Date()) {
       throw new Error("開始時刻が過去です");
     }
+    if (endTime < startTime) {
+      throw new Error("終了時刻が開始時刻よりも過去です");
+    }
     this.id = id;
     this.startTime = startTime;
+    this.endTime = endTime;
   }
 }
 
@@ -19,17 +24,25 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    expect(new Auction(1, new Date())).toBeInstanceOf(Auction);
+    const feature = new Date();
+    expect(new Auction(1, new Date(), feature)).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     const past = new Date();
     past.setFullYear(past.getFullYear() - 1);
+    const feature = new Date();
     expect(() => {
-      new Auction(1, past);
+      new Auction(1, past, feature);
     }).toThrow("開始時刻が過去です");
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-    fail();
+    const past = new Date();
+    past.setFullYear(past.getFullYear() - 1);
+    const feature = new Date();
+    feature.setFullYear(feature.getFullYear() - 3);
+    expect(() => {
+      new Auction(1, past, feature);
+    }).toThrow("終了時刻が開始時刻よりも過去です");
   });
   test("オークションを開始する", () => {
     fail();
