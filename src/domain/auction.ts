@@ -3,6 +3,7 @@ export class Auction {
   constructor(
     readonly started_at: Date,
     readonly end_at: Date,
+    readonly isStarted: boolean
   ) {
     if (new Date() > started_at) {
       throw new Error("開始時刻が過去です");
