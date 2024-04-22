@@ -15,7 +15,7 @@ describe("Auction", () => {
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     expect(() => {
       Auction.create(1, new Date());
-    }).toThrow();
+    }).toThrow("Auction cannot be created with past start time");
   });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();

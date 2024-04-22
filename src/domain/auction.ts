@@ -6,9 +6,16 @@ class Auction {
     ){}
 
     static create(id: number, startTime: Date): Auction {
-        if (nowDate)
+        if (date() > startTime) {
+            throw new Error("開始時刻が過去の日付です")
+        }
 
         return new Auction(id, startTime);
+    }
+
+    get date(): Date {
+        const nowDate = new Date();
+        return nowDate;
     }
       
 }
