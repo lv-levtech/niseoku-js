@@ -14,12 +14,14 @@ describe("Auction", () => {
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     expect(() => {
-      Auction.create(1, new Date());
-    }).toThrow("Auction cannot be created with past start time");
+      Auction.create(1, new Date('2020-01-01T00:00:00.000Z'));
+    }).toThrow("開始時刻が過去の日付です");
   });
-  // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
+    expect(() => {
+      Auction.create(1, new Date('2020-01-01T00:00:00.000Z'), new Date('2020-01-01T00:00:00.000Z'));
+    }).toThrow("終了時刻が開始時刻より過去の日付です");
+  });
   // test("オークションを開始する", () => {
   //   fail();
   // });
