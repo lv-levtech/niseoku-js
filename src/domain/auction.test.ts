@@ -1,12 +1,20 @@
 import { describe } from "node:test";
 
+
+class Auction {
+  public readonly id: number;
+  constructor(id: number) {
+    this.id = id;
+  }
+}
+
 afterEach(() => {
   jest.useRealTimers();
 });
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    fail();
+    expect(new Auction(1)).toBeInstanceOf(Auction);
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     fail();
