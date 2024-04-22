@@ -11,7 +11,10 @@ class Auction {
     }
   }
 
-  start() {
+  start(now: Date) {
+   if (this.startTime > now) {
+      throw new Error("入札が開始できないよぉ");
+   }
     return new Auction(this.id, this.startTime, this.endTime, true);
   }
 
@@ -53,12 +56,22 @@ describe("Auction", () => {
     const endTime = new Date();
     endTime.setFullYear(endTime.getFullYear() + 2);
     const auction = Auction.create(1, startTime, endTime);
-    const startedAuction = auction.start();
+    const now = new Date();
+    const startedAuction = auction.start(now);
     expect(startedAuction.isStarted).toBe(true);
   });
-  // test("開始時刻前にオークションを開始できない", () => {
-  //   fail();
-  // });
+  test("開始時刻前にオークションを開始できない", () => {
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
+    const endTime = new Date();
+    endTime.setFullYear(endTime.getFullYear() + 2);
+    const now = new Date();
+    const auction = Auction.create(1, startTime, endTime);
+    expect(() => { 
+      auction.start(now);
+      
+    }).toThrow("入札が開始できないよぉ");
+  });
   // test("オークションが開始していない場合は、入札できない", () => {
   //   fail();
   // });
