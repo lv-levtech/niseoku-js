@@ -37,9 +37,9 @@ describe("Auction", () => {
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     const past = new Date();
-    past.setFullYear(past.getFullYear() - 1);
+    past.setFullYear(past.getFullYear() + 10);
     const feature = new Date();
-    feature.setFullYear(feature.getFullYear() - 3);
+    feature.setFullYear(feature.getFullYear() +1);
     expect(() => {
       new Auction(1, past, feature);
     }).toThrow("終了時刻が開始時刻よりも過去です");
