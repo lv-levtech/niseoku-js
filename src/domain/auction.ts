@@ -1,5 +1,7 @@
 
 export class Auction {
-  constructor() {
+  constructor(
+    readonly started_at: Date,
+  ) {
   }
 }

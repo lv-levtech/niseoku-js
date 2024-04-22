@@ -10,9 +10,10 @@ describe("Auction", () => {
     const auction = new Auction();
     expect(auction).toBeDefined();
   });
-  // test("開始時刻が過去の場合は、オークションは作成できない", () => {
-  //   fail();
-  // });
+  test("開始時刻が過去の場合は、オークションは作成できない", () => {
+    const auction = new Auction({started_at: new Date("2024-04-22")});
+    expect(auction.started_at).toBe(new Date("2024-04-22")) 
+  });
   // test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
   //   fail();
   // });
