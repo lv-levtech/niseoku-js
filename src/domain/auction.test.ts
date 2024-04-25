@@ -44,15 +44,27 @@ describe("Auction", () => {
       obj.bid(1, 1000)
     }).toThrow("オークションが開始していない場合は、入札できません");
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
-  // test("最高額より少ない価格では入札できない", () => {
-  //   fail();
-  // });
-  // test("オークションを終了できる_落札者が存在する場合", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.open(new Date('2025-01-02T00:00:00.001Z'))
+    obj.bid(1, 100)
+    expect(obj.currentPrice).toBe(100);
+  });
+  test("最高額より少ない価格では入札できない", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.open(new Date('2025-01-02T00:00:00.001Z'))
+    expect(() => {
+      obj.bid(1, 1000)
+      obj.bid(1, 1)
+    }).toThrow("最高額より少ない価格では入札できない");
+  });
+  test("オークションを終了できる_落札者が存在する場合", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.open(new Date('2025-01-02T00:00:00.001Z'))
+    obj.bid(1, 1)
+    obj.end()
+    expect(obj.opend).toBe(false);
+  });
   // test("オークションを終了できる_落札者が不在の場合", () => {
   //   fail();
   // });

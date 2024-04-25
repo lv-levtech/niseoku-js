@@ -3,8 +3,8 @@ const nowDate = new Date();
 class Auction {
 
     public opend: boolean = false;
-    private bidderId?: number;
-    private currentPrice: number = 0;
+    private _bidderId?: number;
+    private _currentPrice: number = 0;
 
 
     private constructor(
@@ -35,15 +35,22 @@ class Auction {
         if(!this.opend){
             throw new Error("オークションが開始していない場合は、入札できません")
         }
-        this.bidderId = bidderId;
-        this.currentPrice = price;
+        if(price <= this._currentPrice){
+            throw new Error("最高額より少ない価格では入札できない")
+        }
+        this._bidderId = bidderId;
+        this._currentPrice = price;
     }
+
+    end()
 
     get currentPrice(): number{
-        return this.currentPrice;
+        return this._currentPrice;
     }
 
-    
+    get bidderId(): number | undefined{
+        return this._bidderId;
+    }
       
 }
 export { Auction };
