@@ -16,6 +16,9 @@ export class Auction {
   }
 
   start() {
+    if (new Date() < this.started_at) {
+      throw new Error("開始時刻前にオークションを開始できません");
+    }
     this._status = "started";
   }
 
