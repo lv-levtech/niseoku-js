@@ -23,11 +23,13 @@ describe("Auction", () => {
     expect(()=>{new Auction(new Date("2024-04-31"),new Date("2022-12-30"))}).toThrow();
   });
   test("オークションを開始する", () => {
+    const auction = new Auction(new Date("2024-05-01"),new Date("2024-05-23"));
+
+    // オークションを開始するために時刻を進める
     jest.useFakeTimers();
-    const mockDate = new Date("2024/04/30");
+    const mockDate = new Date("2024/05/02");
     jest.setSystemTime(mockDate);
 
-    const auction = new Auction(new Date("2024-05-01"),new Date("2024-05-23"));
     auction.start();
     expect(auction.status).toBe("started");
   });
