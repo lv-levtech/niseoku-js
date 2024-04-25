@@ -38,11 +38,11 @@ describe("Auction", () => {
   test("オークションが開始していない場合は、入札できない", () => {
     const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
     expect(() => {
-      expect(obj.opend).toBe(false); 
+      //expect(obj.opend).toBe(false); 
       // obj.open(new Date('2025-01-02T00:00:00.001Z'))
       // expect(obj.opend).toBe(false); 
-      // obj.bid()
-    })
+      obj.bid(1, 1000)
+    }).toThrow("オークションが開始していない場合は、入札できません");
   });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
