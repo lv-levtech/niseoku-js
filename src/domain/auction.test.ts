@@ -67,12 +67,12 @@ describe("Auction", () => {
   test("開始時刻前にオークションを開始できない", () => {
     const startTime = new Date();
     startTime.setFullYear(startTime.getFullYear() + 1);
-    const endTime = new Date();
+    const endTime = startTime
     endTime.setFullYear(endTime.getFullYear() + 2);
-    const now = new Date();
+    const mockNow = new Date();
     const auction = Auction.create(1, startTime, endTime);
     expect(() => { 
-      auction.start(now);
+      auction.start(mockNow);
       
     }).toThrow("入札が開始できないよぉ");
   });
