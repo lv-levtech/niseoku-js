@@ -2,7 +2,7 @@ import { describe } from "node:test";
 
 
 class Auction {
-  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false, readonly startPrice: number = 0, readonly currentPrice: number = 0, readonly isEnded: boolean = false) {
+  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false, readonly startPrice: number = 0, readonly currentPrice: number = 0, readonly winnerUserId: number|undefined = undefined, readonly isEnded: boolean = false) {
     if (startTime < new Date()) {
       throw new Error("開始時刻が過去です");
     }
@@ -18,18 +18,18 @@ class Auction {
     return new Auction(this.id, this.startTime, this.endTime, true);
   }
 
-  bid(price: number) {
+  bid(price: number, userId: number) {
     if (!this.isStarted) {
       throw new Error("入札できないよ");
     }
     if (price <= this.currentPrice) {
       throw new Error("最高額以下の価格では入札できない");
     }
-    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, price);
+    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, price, userId);
   }
 
   end() {
-    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, this.currentPrice, true);
+    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, this.currentPrice, this.winnerUserId, true);
   }
 
   static create(id: number, startTime: Date, endTime: Date): Auction {
@@ -102,7 +102,7 @@ describe("Auction", () => {
 
     const auction = Auction.create(1, startTime, endTime);
     expect(() => {
-      auction.bid(1000);
+      auction.bid(1000, 1);
     }).toThrow("入札できないよ");
   });
   test("最高額にてオークションに入札する", () => {
@@ -117,7 +117,7 @@ describe("Auction", () => {
 
     const auction = Auction.create(1, startTime, endTime);
     const startedAuction = auction.start(mockNow);
-    expect(startedAuction.bid(1000).currentPrice).toBe(1000);
+    expect(startedAuction.bid(1000, 1).currentPrice).toBe(1000);
     
   });
   test("最高額より少ない価格では入札できない", () => {
@@ -134,7 +134,7 @@ describe("Auction", () => {
     const startedAuction = auction.start(mockNow);
     expect((
     ) => {
-      startedAuction.bid(1000).bid(500);
+      startedAuction.bid(1000, 1).bid(500, 2);
     }).toThrow("最高額以下の価格では入札できない");
   });
   test("同じ価格では入札できない", () => {
@@ -151,7 +151,7 @@ describe("Auction", () => {
     const startedAuction = auction.start(mockNow);
     expect((
     ) => {
-      startedAuction.bid(1000).bid(500);
+      startedAuction.bid(1000, 1).bid(500, 1);
     }).toThrow("最高額以下の価格では入札できない");
   });
   test("オークションを終了できる_落札者が存在する場合", () => {
@@ -166,7 +166,7 @@ describe("Auction", () => {
 
     const auction = Auction.create(1, startTime, endTime);
     const startedAuction = auction.start(mockNow);
-    const bidedAuction = startedAuction.bid(1000).bid(1500);
+    const bidedAuction = startedAuction.bid(1000, 1).bid(1500, 2);
     const endedAuction =  bidedAuction.end();
     expect(endedAuction.isEnded).toBe(true);
   });
