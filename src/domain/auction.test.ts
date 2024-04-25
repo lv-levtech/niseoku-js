@@ -2,7 +2,7 @@ import { describe } from "node:test";
 
 
 class Auction {
-  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false, readonly startPrice: number = 0, readonly currentPrice: number = 0) {
+  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false, readonly startPrice: number = 0, readonly currentPrice: number = 0, readonly isEnded: boolean = false) {
     if (startTime < new Date()) {
       throw new Error("開始時刻が過去です");
     }
@@ -26,6 +26,10 @@ class Auction {
       throw new Error("最高額以下の価格では入札できない");
     }
     return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, price);
+  }
+
+  end() {
+    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, this.currentPrice, true);
   }
 
   static create(id: number, startTime: Date, endTime: Date): Auction {
@@ -150,9 +154,22 @@ describe("Auction", () => {
       startedAuction.bid(1000).bid(500);
     }).toThrow("最高額以下の価格では入札できない");
   });
-  // test("オークションを終了できる_落札者が存在する場合", () => {
-  //   fail();
-  // });
+  test("オークションを終了できる_落札者が存在する場合", () => {
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
+
+    const endTime = new Date(startTime)
+    endTime.setFullYear(endTime.getFullYear() + 1);
+
+    const mockNow = new Date(startTime);
+    mockNow.setFullYear(mockNow.getFullYear() + 1);
+
+    const auction = Auction.create(1, startTime, endTime);
+    const startedAuction = auction.start(mockNow);
+    const bidedAuction = startedAuction.bid(1000).bid(1500);
+    const endedAuction =  bidedAuction.end();
+    expect(endedAuction.isEnded).toBe(true);
+  });
   // test("オークションを終了できる_落札者が不在の場合", () => {
   //   fail();
   // });
