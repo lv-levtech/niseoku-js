@@ -22,6 +22,9 @@ class Auction {
     if (!this.isStarted) {
       throw new Error("入札できないよ");
     }
+    if (price <= this.currentPrice) {
+      throw new Error("最高額より少ない価格では入札できない");
+    }
     return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, price);
   }
 
@@ -98,7 +101,8 @@ describe("Auction", () => {
       auction.bid(1000);
     }).toThrow("入札できないよ");
   });
-  test("最高額にてオークションに入札する", () => {const startTime = new Date();
+  test("最高額にてオークションに入札する", () => {
+    const startTime = new Date();
     startTime.setFullYear(startTime.getFullYear() + 1);
 
     const endTime = new Date(startTime)
@@ -112,9 +116,23 @@ describe("Auction", () => {
     expect(startedAuction.bid(1000).currentPrice).toBe(1000);
     
   });
-  // test("最高額より少ない価格では入札できない", () => {
-  //   fail();
-  // });
+  test("最高額より少ない価格では入札できない", () => {
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
+
+    const endTime = new Date(startTime)
+    endTime.setFullYear(endTime.getFullYear() + 1);
+
+    const mockNow = new Date(startTime);
+    mockNow.setFullYear(mockNow.getFullYear() + 1);
+
+    const auction = Auction.create(1, startTime, endTime);
+    const startedAuction = auction.start(mockNow);
+    expect((
+    ) => {
+      startedAuction.bid(1000).bid(500);
+    }).toThrow("最高額より少ない価格では入札できない");
+  });
   // test("オークションを終了できる_落札者が存在する場合", () => {
   //   fail();
   // });
