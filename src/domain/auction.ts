@@ -29,4 +29,10 @@ export class Auction {
   get status() {
     return this._status;
   }
+
+  bid() {
+    if (this._status !== "started") {
+      throw new Error("オークションが開始していません");
+    }
+  }
 }

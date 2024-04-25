@@ -37,9 +37,11 @@ describe("Auction", () => {
     const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
     expect(auction.start).toThrow();
   });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
+    expect(auction.status).not.toBe("started");
+    expect(auction.bid).toThrow();
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
