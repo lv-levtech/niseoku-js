@@ -13,19 +13,19 @@ afterEach(() => {
 
 describe("Auction", () => {
   test("初期化できる", () => {
-    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"), true);
+    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
     expect(auction).toBeDefined();
   });
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
-    expect(()=>{new Auction(new Date("2022-12-31"),new Date("2024-04-23"), true)}).toThrow();
+    expect(()=>{new Auction(new Date("2022-12-31"),new Date("2024-04-23"))}).toThrow();
   });
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
-    expect(()=>{new Auction(new Date("2024-04-31"),new Date("2022-12-30"), true)}).toThrow();
+    expect(()=>{new Auction(new Date("2024-04-31"),new Date("2022-12-30"))}).toThrow();
   });
   test("オークションを開始する", () => {
-    // TODO 今から始めます！の時間を第3引数に入れて、第1引数のオークション開始時間と比較して過去の場合はエラーを出すことを想定するテストを書こうとして時間切れした
-    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"), new Date("2024-04-23"));
-    expect(auction.isStarted).toBe(true);
+    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
+    auction.start();
+    expect(auction.status).toBe("started");
   });
   // test("開始時刻前にオークションを開始できない", () => {
   //   fail();
