@@ -2,7 +2,7 @@ import { describe } from "node:test";
 
 
 class Auction {
-  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false) {
+  private constructor(readonly id: number, readonly startTime: Date, readonly endTime: Date, readonly isStarted: boolean = false, readonly startPrice: number = 0, readonly currentPrice: number = 0) {
     if (startTime < new Date()) {
       throw new Error("開始時刻が過去です");
     }
@@ -22,7 +22,7 @@ class Auction {
     if (!this.isStarted) {
       throw new Error("入札できないよ");
     }
-    return new Auction(this.id, this.startTime, this.endTime, this.isStarted);
+    return new Auction(this.id, this.startTime, this.endTime, this.isStarted, this.startPrice, price);
   }
 
   static create(id: number, startTime: Date, endTime: Date): Auction {
@@ -95,7 +95,7 @@ describe("Auction", () => {
 
     const auction = Auction.create(1, startTime, endTime);
     expect(() => {
-      auction.bid(1, 1000);
+      auction.bid(1000);
     }).toThrow("入札できないよ");
   });
   // test("最高額にてオークションに入札する", () => {
