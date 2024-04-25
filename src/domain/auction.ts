@@ -2,6 +2,8 @@ const nowDate = new Date();
 
 class Auction {
 
+    public opend: boolean = false;
+
     private constructor(
         readonly id: number,
         readonly startTime: Date,
@@ -17,6 +19,15 @@ class Auction {
         }
         return new Auction(id, startTime, endTime);
     }
+
+    open(openTime: Date) {
+        if (openTime < this.startTime) {
+            throw new Error("開始時刻前にオークションを開始できません")
+        }
+        this.opend = true
+    }
+
+    
       
 }
 export { Auction };

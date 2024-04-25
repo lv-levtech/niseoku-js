@@ -7,6 +7,8 @@ afterEach(() => {
 
 export const nowDate = new Date("2021-01-01T00:00:00.000Z");
 
+
+
 describe("Auction", () => {
   test("初期化できる", () => {
     const obj = Auction.create(1, new Date(), new Date());
@@ -22,15 +24,21 @@ describe("Auction", () => {
       Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-01T00:00:00.000Z'));
     }).toThrow("終了時刻が開始時刻より過去の日付です");
   });
-  // test("オークションを開始する", () => {
-  //   fail();
-  // });
-  // test("開始時刻前にオークションを開始できない", () => {
-  //   fail();
-  // });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションを開始する", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.open(new Date('2025-01-02T00:00:00.001Z'))
+    expect(obj.opend).toBe(true); 
+  });
+  test("開始時刻前にオークションを開始できない", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    expect(() => {
+    obj.open(new Date('2025-01-01T00:00:00.000Z'))
+    }).toThrow("開始時刻前にオークションを開始できません");
+  });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
