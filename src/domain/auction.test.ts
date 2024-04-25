@@ -63,11 +63,14 @@ describe("Auction", () => {
     obj.open(new Date('2025-01-02T00:00:00.001Z'))
     obj.bid(1, 1)
     obj.end()
-    expect(obj.opend).toBe(false);
+    expect(obj.buyerId).toBe(1);
   });
-  // test("オークションを終了できる_落札者が不在の場合", () => {
-  //   fail();
-  // });
+  test("オークションを終了できる_落札者が不在の場合", () => {
+    const obj = Auction.create(1, new Date('2025-01-02T00:00:00.000Z'), new Date('2025-01-03T00:00:00.000Z'));
+    obj.open(new Date('2025-01-02T00:00:00.001Z'))
+    obj.end()
+    expect(obj.buyerId).toBe(1);
+  });
   // test("出品者の販売価格を取得する_2パーセントの手数料を引く", () => {
   //   fail();
   // });

@@ -4,6 +4,7 @@ class Auction {
 
     public opend: boolean = false;
     private _bidderId?: number;
+    private _buyerId?: number;
     private _currentPrice: number = 0;
 
 
@@ -46,6 +47,13 @@ class Auction {
         if(!this.opend) {
             throw new Error("オークションは既に終了しています")
         }
+        if(this._bidderId === undefined) {
+            throw new Error("入札者がいません")
+        }
+        if(this._buyerId != undefined) {
+            throw new Error("オークションは落札されています")
+        }
+        this._buyerId = this._bidderId;
     }
 
     get currentPrice(): number{
@@ -54,6 +62,10 @@ class Auction {
 
     get bidderId(): number | undefined{
         return this._bidderId;
+    }
+
+    get buyerId(): number | undefined{
+        return this._buyerId;
     }
       
 }
