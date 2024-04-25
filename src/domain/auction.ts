@@ -42,7 +42,11 @@ class Auction {
         this._currentPrice = price;
     }
 
-    end()
+    end(): void {
+        if(!this.opend) {
+            throw new Error("オークションは既に終了しています")
+        }
+    }
 
     get currentPrice(): number{
         return this._currentPrice;
