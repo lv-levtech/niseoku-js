@@ -98,9 +98,20 @@ describe("Auction", () => {
       auction.bid(1000);
     }).toThrow("入札できないよ");
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
+
+    const endTime = new Date(startTime)
+    endTime.setFullYear(endTime.getFullYear() + 1);
+
+    const mockNow = new Date(startTime);
+    mockNow.setFullYear(mockNow.getFullYear() + 1);
+
+    const auction = Auction.create(1, startTime, endTime);
+    const startedAuction = auction.start(mockNow);
+    expect(startedAuction.bid(1000).currentPrice).toBe(1000);
+    
+  });
   // test("最高額より少ない価格では入札できない", () => {
   //   fail();
   // });
