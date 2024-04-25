@@ -42,9 +42,16 @@ describe("Auction", () => {
     expect(auction.status).not.toBe("started");
     expect(auction.bid).toThrow();
   });
-  // test("最高額にてオークションに入札する", () => {
-  //   fail();
-  // });
+  test("最高額にてオークションに入札する", () => {
+    const auction = new Auction(new Date("2024-04-22"),new Date("2024-04-23"));
+    // オークションを開始するために時刻を進める
+    jest.useFakeTimers();
+    const mockDate = new Date("2024/04/23");
+    jest.setSystemTime(mockDate);
+    auction.start();
+    auction.bid(100);
+    expect(auction.highestBid).toBe(100);
+  });
   // test("最高額より少ない価格では入札できない", () => {
   //   fail();
   // });

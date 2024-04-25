@@ -2,6 +2,7 @@
 export class Auction {
   // TODO: 列挙型にする
   private _status: string = "created";
+  private _highestBid: number = 0;
 
   constructor(
     readonly started_at: Date,
@@ -30,9 +31,14 @@ export class Auction {
     return this._status;
   }
 
-  bid() {
+  bid(price: number) {
     if (this._status !== "started") {
       throw new Error("オークションが開始していません");
     }
+    this._highestBid = price;
+  }
+
+  get highestBid() {
+    return this._highestBid;
   }
 }
