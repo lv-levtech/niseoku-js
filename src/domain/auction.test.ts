@@ -36,7 +36,7 @@ describe("Auction", () => {
   test("開始時刻が過去の場合は、オークションは作成できない", () => {
     const startTime = new Date();
     startTime.setFullYear(startTime.getFullYear() - 1);
-    const endTime = new Date();
+    const endTime = new Date(startTime)
     expect(() => {
       Auction.create(1, startTime, endTime);
     }).toThrow("開始時刻が過去です");
@@ -44,35 +44,35 @@ describe("Auction", () => {
   test("終了時刻が開始時刻より過去の場合は、オークションは作成できない", () => {
     const startTime = new Date();
     startTime.setFullYear(startTime.getFullYear() + 10);
-    const endTime = new Date();
-    endTime.setFullYear(endTime.getFullYear() +1);
+    const endTime = new Date(startTime)
+    endTime.setFullYear(endTime.getFullYear() - 1);
     expect(() => {
       Auction.create(1, startTime, endTime);
     }).toThrow("終了時刻が開始時刻よりも過去です");
   });
   test("オークションを開始する", () => {
-    const now = new Date();
-    // now.setFullYear(now.getFullYear() + 2);
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
 
-    const startTime = now;
-    startTime.setFullYear(startTime.getFullYear() - 1);
-
-    const endTime = now;
+    const endTime = new Date(startTime)
     endTime.setFullYear(endTime.getFullYear() + 1);
 
+    const mockNow = new Date(startTime);
+    mockNow.setFullYear(mockNow.getFullYear() + 1);
+
     const auction = Auction.create(1, startTime, endTime);
-    const startedAuction = auction.start(now);
+    const startedAuction = auction.start(mockNow);
     expect(startedAuction.isStarted).toBe(true);
   });
   test("開始時刻前にオークションを開始できない", () => {
-    const startTime = new Date();
+    const now = new Date();
+    const startTime = new Date(now);
     startTime.setFullYear(startTime.getFullYear() + 1);
-    const endTime = startTime
+    const endTime = new Date(startTime)
     endTime.setFullYear(endTime.getFullYear() + 2);
-    const mockNow = new Date();
     const auction = Auction.create(1, startTime, endTime);
     expect(() => { 
-      auction.start(mockNow);
+      auction.start(now);
       
     }).toThrow("入札が開始できないよぉ");
   });
