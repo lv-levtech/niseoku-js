@@ -18,6 +18,13 @@ class Auction {
     return new Auction(this.id, this.startTime, this.endTime, true);
   }
 
+  bid(price: number) {
+    if (!this.isStarted) {
+      throw new Error("入札できないよ");
+    }
+    return new Auction(this.id, this.startTime, this.endTime, this.isStarted);
+  }
+
   static create(id: number, startTime: Date, endTime: Date): Auction {
     return new Auction(id, startTime, endTime);
   }
@@ -76,9 +83,21 @@ describe("Auction", () => {
       
     }).toThrow("入札が開始できないよぉ");
   });
-  // test("オークションが開始していない場合は、入札できない", () => {
-  //   fail();
-  // });
+  test("オークションが開始していない場合は、入札できない", () => {
+    const startTime = new Date();
+    startTime.setFullYear(startTime.getFullYear() + 1);
+
+    const endTime = new Date(startTime)
+    endTime.setFullYear(endTime.getFullYear() + 1);
+
+    const mockNow = new Date(startTime);
+    mockNow.setFullYear(mockNow.getFullYear() + 1);
+
+    const auction = Auction.create(1, startTime, endTime);
+    expect(() => {
+      auction.bid(1, 1000);
+    }).toThrow("入札できないよ");
+  });
   // test("最高額にてオークションに入札する", () => {
   //   fail();
   // });
